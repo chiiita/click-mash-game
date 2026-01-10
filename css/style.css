@@ -1,0 +1,345 @@
+/* =========================
+   レトロUI（8bit / アーケード風）
+   ========================= */
+
+* { box-sizing: border-box; image-rendering: pixelated; }
+
+:root {
+  --bg: #0b1020;
+  --panel: #101a34;
+  --panel2: #0e1730;
+  --line: #2e3a66;
+  --txt: #e8f0ff;
+  --dim: rgba(232, 240, 255, 0.75);
+  --neon: #69ffcc;
+  --pink: #ff4fd8;
+  --yellow: #ffe06b;
+  --shadow: rgba(0,0,0,0.55);
+  --pixel-border: 4px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(105,255,204,0.12), transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(255,79,216,0.12), transparent 45%),
+    linear-gradient(180deg, var(--bg), #070b16);
+  color: var(--txt);
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* CRT走査線オーバーレイ（見た目用） */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.03) 1px,
+      rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0) 6px
+    );
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  animation: crtFlicker 2.3s infinite;
+}
+
+@keyframes crtFlicker {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.45; }
+}
+
+.wrap {
+  width: min(820px, 100%);
+  position: relative;
+}
+
+/* ヘッダー */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.logo {
+  border: var(--pixel-border) solid var(--line);
+  background: linear-gradient(180deg, rgba(16,26,52,0.9), rgba(14,23,48,0.9));
+  padding: 12px 14px;
+  box-shadow: 0 12px 0 var(--shadow);
+}
+
+.logo-top {
+  font-size: 28px;
+  letter-spacing: 0.06em;
+  color: var(--neon);
+  text-shadow: 0 0 18px rgba(105,255,204,0.25);
+}
+
+.logo-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--dim);
+}
+
+.credit {
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  padding: 10px 12px;
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(16,26,52,0.6);
+  box-shadow: 0 12px 0 var(--shadow);
+  color: var(--yellow);
+}
+
+/* メインパネル */
+.panel {
+  border: var(--pixel-border) solid var(--line);
+  background: linear-gradient(180deg, rgba(16,26,52,0.92), rgba(14,23,48,0.92));
+  padding: 18px;
+  box-shadow: 0 18px 0 var(--shadow);
+  position: relative;
+}
+
+/* 上段 */
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.controls {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.control {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+}
+
+.control select {
+  padding: 10px 12px;
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(11,16,32,0.65);
+  color: var(--txt);
+  outline: none;
+}
+
+.checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 20px;
+}
+
+/* 目標表示 */
+.targets {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(11,16,32,0.55);
+  padding: 8px 10px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--txt);
+}
+.badge strong { color: var(--yellow); }
+
+/* ステータス */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.stat {
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(11,16,32,0.45);
+  padding: 10px 12px;
+}
+
+.label {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--dim);
+}
+
+.value {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--neon);
+  text-shadow: 0 0 14px rgba(105,255,204,0.18);
+}
+
+.unit {
+  font-size: 12px;
+  margin-left: 6px;
+  color: var(--dim);
+}
+
+/* メインボタン */
+.click-btn {
+  width: 100%;
+  border: var(--pixel-border) solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255,79,216,0.18), rgba(105,255,204,0.12)),
+    radial-gradient(circle at 20% 20%, rgba(255,224,107,0.18), transparent 50%),
+    rgba(11,16,32,0.6);
+  color: var(--txt);
+
+  padding: 18px 14px;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+
+  box-shadow: 0 14px 0 var(--shadow);
+  transform: translateY(0);
+  transition: transform 0.05s ease, filter 0.15s ease;
+  position: relative;
+}
+
+.click-btn:active {
+  transform: translateY(10px);
+  box-shadow: 0 4px 0 var(--shadow);
+}
+
+.click-btn:disabled {
+  filter: grayscale(0.8) brightness(0.75);
+  cursor: not-allowed;
+}
+
+.hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--yellow);
+}
+
+/* クリック時の演出 */
+.pop { animation: pop 120ms steps(2, end); }
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* 結果表示 */
+.result {
+  margin-top: 14px;
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(11,16,32,0.55);
+  padding: 12px;
+  min-height: 66px;
+}
+
+.result-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.medal-emoji {
+  width: 52px;
+  height: 52px;
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(0,0,0,0.2);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+}
+
+.result-title {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: var(--yellow);
+}
+
+.result-text {
+  margin-top: 6px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--txt);
+}
+
+/* フッター */
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.sub-btn {
+  border: var(--pixel-border) solid var(--line);
+  background: rgba(16,26,52,0.7);
+  color: var(--txt);
+  padding: 10px 16px;
+  cursor: pointer;
+  letter-spacing: 0.12em;
+  box-shadow: 0 10px 0 var(--shadow);
+}
+
+.sub-btn:active {
+  transform: translateY(8px);
+  box-shadow: 0 2px 0 var(--shadow);
+}
+
+/* =========================
+   FX: レトロ紙吹雪（ドット粒子）
+   ========================= */
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 粒子（四角いドット） */
+.px {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(255,255,255,0.25);
+  background: rgba(105,255,204,0.95);
+  animation: pxFly 720ms steps(6, end) forwards;
+  transform: translate(0,0);
+  filter: drop-shadow(0 0 6px rgba(105,255,204,0.18));
+}
+
+@keyframes pxFly {
+  0%   { opacity: 1; transform: translate(var(--x0), var(--y0)) scale(1); }
+  70%  { opacity: 1; transform: translate(var(--x1), var(--y1)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--x2), var(--y2)) scale(1); }
+}
+
+/* スマホ */
+@media (max-width: 640px) {
+  .stats { grid-template-columns: 1fr; }
+  .logo-top { font-size: 24px; }
+  .click-btn { font-size: 30px; }
+}

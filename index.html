@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>クリック連打！レトロゲーム</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- CRT風の走査線（見た目用） -->
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <header class="header">
+      <div class="logo">
+        <div class="logo-top">クリック連打！</div>
+        <div class="logo-sub">レトロエディション</div>
+      </div>
+      <div class="credit">コインいれてね</div>
+    </header>
+
+    <section class="panel">
+      <div class="top-row">
+        <div class="controls">
+          <label class="control">
+            難易度（制限時間）
+            <select id="difficulty" aria-label="難易度（制限時間）">
+              <option value="5">むずかしい / 5秒</option>
+              <option value="10" selected>ふつう / 10秒</option>
+              <option value="30">かんたん / 30秒</option>
+            </select>
+          </label>
+
+          <label class="control checkbox">
+            <input type="checkbox" id="soundToggle" checked>
+            効果音ON
+          </label>
+        </div>
+
+        <!-- 目標（銅/銀/金） -->
+        <div class="targets" id="targets" aria-label="目標表示"></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="label">のこり時間</div>
+          <div class="value"><span id="time">10</span><span class="unit">秒</span></div>
+        </div>
+        <div class="stat">
+          <div class="label">スコア</div>
+          <div class="value"><span id="score">0</span><span class="unit">回</span></div>
+        </div>
+        <div class="stat">
+          <div class="label">ハイスコア</div>
+          <div class="value"><span id="highScore">0</span><span class="unit">回</span></div>
+        </div>
+      </div>
+
+      <button id="clickBtn" class="click-btn" aria-label="クリック連打ボタン">
+        押せ！！
+        <span class="hint">（れんだ！）</span>
+      </button>
+
+      <!-- 結果（絵文字メダル） -->
+      <div class="result" aria-live="polite">
+        <div class="result-row">
+          <div id="medalEmoji" class="medal-emoji" aria-hidden="true"></div>
+          <div>
+            <div id="resultTitle" class="result-title"></div>
+            <div id="resultText" class="result-text"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button id="resetBtn" class="sub-btn">リセット</button>
+      </div>
+    </section>
+
+    <!-- レトロ紙吹雪（ドット粒子） -->
+    <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
